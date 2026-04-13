@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Onboarding - SmartOnboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'DM Sans',sans-serif;background:#0d0d14;color:#fff;min-height:100vh;}
+        .navbar{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+        .nav-brand{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .nav-logout{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:8px 18px;border-radius:10px;text-decoration:none;font-size:13px;}
+        .container{max-width:1100px;margin:0 auto;padding:32px 24px;}
+        .welcome-card{background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(168,85,247,0.2));border:1px solid rgba(99,102,241,0.3);border-radius:24px;padding:32px;margin-bottom:28px;}
+        .welcome-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;margin-bottom:4px;}
+        .welcome-role{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:20px;}
+        .progress-label{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:8px;}
+        .progress-track{background:rgba(255,255,255,0.1);border-radius:20px;height:8px;overflow:hidden;}
+        .progress-fill{height:8px;border-radius:20px;background:linear-gradient(90deg,#6366f1,#a855f7);}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+        .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:24px;}
+        .card-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+        .card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(99,102,241,0.2);}
+        .task-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+        .task-item:last-child{border-bottom:none;}
+        .check-form{display:inline;}
+        .check-btn{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.15);border-radius:50%;width:22px;height:22px;cursor:pointer;flex-shrink:0;margin-top:2px;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+        .check-btn-done{background:linear-gradient(135deg,#10b981,#3b82f6);border-color:transparent;}
+        .task-info{flex:1;}
+        .task-name{font-size:13px;font-weight:500;color:rgba(255,255,255,0.85);}
+        .task-name-done{text-decoration:line-through;color:rgba(255,255,255,0.3);}
+        .task-desc{font-size:12px;color:rgba(255,255,255,0.35);margin-top:3px;line-height:1.4;}
+        .task-cat{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;margin-top:5px;background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.2);}
+        .doc-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+        .doc-item:last-child{border-bottom:none;}
+        .doc-name{font-size:13px;color:rgba(255,255,255,0.8);}
+        .doc-date{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;}
+        .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+        .badge-uploaded{background:rgba(59,130,246,0.15);color:#93c5fd;border:1px solid rgba(59,130,246,0.2);}
+        .badge-verified{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.2);}
+        .badge-pending{background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.2);}
+        .upload-section{margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.06);}
+        .upload-label{font-size:12px;font-weight:500;color:rgba(255,255,255,0.4);margin-bottom:12px;letter-spacing:0.5px;text-transform:uppercase;}
+        .upload-input{width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:13px;color:#fff;outline:none;margin-bottom:10px;font-family:'DM Sans',sans-serif;}
+        .upload-input::placeholder{color:rgba(255,255,255,0.2);}
+        .btn-upload{width:100%;padding:11px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:10px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;}
+        .chat-fab{position:fixed;bottom:28px;right:28px;width:58px;height:58px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:50%;border:none;cursor:pointer;font-size:24px;color:#fff;z-index:200;}
+        .chat-window{position:fixed;bottom:100px;right:28px;width:360px;background:#13131f;border:1px solid rgba(255,255,255,0.1);border-radius:20px;display:none;flex-direction:column;overflow:hidden;z-index:200;}
+        .chat-header{background:linear-gradient(135deg,#6366f1,#a855f7);padding:16px 20px;}
+        .chat-header-text{font-weight:600;font-size:14px;}
+        .chat-header-sub{font-size:11px;opacity:0.7;margin-top:1px;}
+        .chat-msgs{height:260px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+        .msg{padding:10px 14px;border-radius:14px;font-size:13px;max-width:85%;line-height:1.5;}
+        .msg-user{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;align-self:flex-end;}
+        .msg-bot{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);align-self:flex-start;}
+        .chat-input-row{display:flex;padding:12px;gap:8px;border-top:1px solid rgba(255,255,255,0.06);}
+        .chat-input{flex:1;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:13px;color:#fff;outline:none;font-family:'DM Sans',sans-serif;}
+        .chat-input::placeholder{color:rgba(255,255,255,0.2);}
+        .chat-send{background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;border:none;border-radius:10px;padding:10px 16px;cursor:pointer;font-size:13px;font-weight:600;}
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-brand">SmartOnboard</div>
+    <a th:href="@{/logout}" class="nav-logout">Sign Out</a>
+</nav>
+
+<div class="container">
+    <div class="welcome-card">
+        <div class="welcome-name">Welcome, <span th:text="${employee.fullName}">Employee</span></div>
+        <div class="welcome-role" th:text="${employee.jobRole} + ' · ' + ${employee.department}"></div>
+        <div class="progress-label">
+            <span>Onboarding Progress</span>
+            <span th:text="${completedCount} + ' of ' + ${totalCount} + ' tasks complete'"></span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" th:style="'width:' + ${progressPercent} + '%'"></div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-title">
+                <div class="card-icon">&#128203;</div>
+                Onboarding Checklist
+            </div>
+            <div th:each="task : ${tasks}">
+                <div class="task-item">
+                    <form class="check-form" th:action="@{'/employee/complete-task/' + ${task.id}}" method="post">
+                        <button type="submit"
+                                class="check-btn"
+                                th:classappend="${task.completed} ? ' check-btn-done' : ''"
+                                th:text="${task.completed} ? '✓' : ''">
+                        </button>
+                    </form>
+                    <div class="task-info">
+                        <div class="task-name"
+                             th:text="${task.taskName}"
+                             th:classappend="${task.completed} ? ' task-name-done' : ''">
+                        </div>
+                        <div class="task-desc" th:text="${task.description}"></div>
+                        <span class="task-cat" th:text="${task.category}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <div class="card-icon">&#128193;</div>
+                Document Tracker
+            </div>
+            <div th:each="doc : ${documents}">
+                <div class="doc-item">
+                    <div>
+                        <div class="doc-name" th:text="${doc.documentName}"></div>
+                        <div class="doc-date" th:text="${doc.uploadedAt}"></div>
+                    </div>
+                    <span class="badge"
+                          th:classappend="${doc.status == 'VERIFIED'} ? ' badge-verified' : (${doc.status == 'UPLOADED'} ? ' badge-uploaded' : ' badge-pending')"
+                          th:text="${doc.status}">
+                    </span>
+                </div>
+            </div>
+            <div class="upload-section">
+                <div class="upload-label">Upload New Document</div>
+                <form th:action="@{/employee/upload-document}" method="post" enctype="multipart/form-data">
+                    <input class="upload-input" type="text" name="documentName" placeholder="Document name e.g. Aadhaar Card" required="required"/>
+                    <input class="upload-input" type="file" name="file" accept=".pdf,.jpg,.png" required="required"/>
+                    <button type="submit" class="btn-upload">Upload Document</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        <div class="chat-header-text">HR Assistant</div>
+        <div class="chat-header-sub">Powered by Gemini AI</div>
+    </div>
+    <div class="chat-msgs" id="chatMsgs">
+        <div class="msg msg-bot">Hi! I am your AI HR assistant. Ask me anything about your onboarding, policies, or benefits!</div>
+    </div>
+    <div class="chat-input-row">
+        <input class="chat-input" id="chatInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="chat-send" onclick="sendMsg()">Send</button>
+    </div>
+</div>
+<button class="chat-fab" onclick="toggleChat()">&#129302;</button>
+
+<script>
+    function toggleChat(){
+        var w=document.getElementById('chatWindow');
+        w.style.display=w.style.display==='flex'?'none':'flex';
+    }
+    async function sendMsg(){
+        var inp=document.getElementById('chatInput');
+        var q=inp.value.trim();
+        if(!q)return;
+        addMsg(q,'user');
+        inp.value='';
+        addMsg('Thinking...','bot','typing');
+        var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(q)});
+        var ans=await res.text();
+        var t=document.getElementById('typing');
+        if(t)t.remove();
+        addMsg(ans,'bot');
+    }
+    function addMsg(text,type,id){
+        var d=document.createElement('div');
+        d.className='msg msg-'+type;
+        d.textContent=text;
+        if(id)d.id=id;
+        var m=document.getElementById('chatMsgs');
+        m.appendChild(d);
+        m.scrollTop=m.scrollHeight;
+    }
+</script>
+</body>
+</html>

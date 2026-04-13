@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SmartOnboard - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'DM Sans',sans-serif;min-height:100vh;background:#0a0a0f;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+        .bg{position:fixed;inset:0;z-index:0;}
+        .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;}
+        .orb1{width:600px;height:600px;background:#6366f1;top:-200px;left:-200px;animation:drift 8s ease-in-out infinite;}
+        .orb2{width:400px;height:400px;background:#a855f7;bottom:-100px;right:-100px;animation:drift 10s ease-in-out infinite reverse;}
+        .orb3{width:300px;height:300px;background:#3b82f6;top:50%;left:50%;animation:drift 6s ease-in-out infinite 2s;}
+        @keyframes drift{0%,100%{transform:translate(0,0);}50%{transform:translate(30px,-30px);}}
+        .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(99,102,241,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.05) 1px,transparent 1px);background-size:60px 60px;z-index:0;}
+        .card{position:relative;z-index:10;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px;width:440px;}
+        .logo-area{text-align:center;margin-bottom:36px;}
+        .logo-icon{width:56px;height:56px;background:linear-gradient(135deg,#6366f1,#a855f7);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;}
+        .logo-text{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px;}
+        .logo-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px;}
+        .field{margin-bottom:18px;}
+        label{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.5);margin-bottom:8px;letter-spacing:0.5px;text-transform:uppercase;}
+        input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-size:14px;color:#fff;outline:none;font-family:'DM Sans',sans-serif;}
+        input::placeholder{color:rgba(255,255,255,0.2);}
+        .btn{width:100%;padding:15px;background:linear-gradient(135deg,#6366f1,#a855f7);border:none;border-radius:12px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;}
+        .error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:20px;text-align:center;}
+        .divider{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+        .divider-line{flex:1;height:1px;background:rgba(255,255,255,0.08);}
+        .divider-text{font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:uppercase;}
+        .signup-link{text-align:center;margin-top:20px;font-size:13px;color:rgba(255,255,255,0.3);}
+        .signup-link a{color:#a78bfa;text-decoration:none;font-weight:600;}
+        .hint{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.2);}
+    </style>
+</head>
+<body>
+<div class="bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+</div>
+<div class="grid-bg"></div>
+<div class="card">
+    <div class="logo-area">
+        <div class="logo-icon">🚀</div>
+        <div class="logo-text">SmartOnboard</div>
+        <div class="logo-sub">AI-Powered HR Onboarding Platform</div>
+    </div>
+    <div th:if="${param.error}" class="error">Invalid username or password. Please try again.</div>
+    <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">Sign in to continue</div>
+        <div class="divider-line"></div>
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div class="field">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter your username" required/>
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required/>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+    </form>
+    <div class="signup-link">
+        Don't have an account? <a href="/signup">Sign Up</a>
+    </div>
+    <div class="hint">Powered by Gemini AI · Built for ZeroCodeHR</div>
+</div>
+</body>
+</html>
